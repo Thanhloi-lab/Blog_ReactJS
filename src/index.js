@@ -4,6 +4,9 @@ const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const methodOverride = require('method-override');
 const sortMiddleware = require('./app/middlewares/sortMiddleware');
+const { env } = require('process');
+env.JWT_KEY = 'musik'
+
 const app = express();
 const port = 3000;
 
@@ -59,6 +62,7 @@ app.engine(
     helpers: require('./helpers/handlebars')
   }),
 );
+
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
 

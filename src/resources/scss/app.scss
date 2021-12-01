@@ -1,14 +1,12 @@
 @import 'variables';
 
-.test{
-    font-size:1rem;
-    background-color: red;
+.card-course-item{
+  margin-top: 10px;
 }
-
-h1{
-    color:$red-color;
+.check-box-select-all-options{
+  margin: 0 16px;
+  width: 150px;
 }
-
-h2{
-    color:$red-color;
+.sort-icon-color{
+  color:$blue-color;
 }

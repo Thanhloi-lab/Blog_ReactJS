@@ -1,0 +1,56 @@
+POST http://localhost:3000/songs/store
+Content-Type: application/json
+
+{
+    "title": "fuck3412u1",
+    "audio_url":"/mypc",
+    "image_url":"/mypc",
+    "uploader":{
+        "uid":"123",
+        "name":"testname"
+    },
+    "duration":300
+}
+
+###
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "user_name": "cthanhloi1",
+    "password": "123456as"
+}
+
+###
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+    "user_name": "cthanhloi1",
+    "password": "123456as",
+    "confirm_password": "123456as",
+    "display_name":"Lợi Cao",
+    "email":"cthanhloi@gmail.com",
+    "image_url":"mypc/image"
+}
+
+
+
+###
+GET http://localhost:3000/users
+
+###
+GET http://localhost:3000/courses/lap-trinh-mobile-voi-redux
+
+###
+
+POST http://localhost:3000/courses/store
+Content-Type: application/json
+
+{
+    "description": "Lập trình mobile với react native tại f8",
+    "name": "công tắc",
+    "videoId": "bvZ1_P9eCpw",
+    "level": "nhập môn",
+    "image": "https://img.youtube.com/"
+}
