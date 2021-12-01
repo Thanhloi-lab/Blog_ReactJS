@@ -2,15 +2,43 @@ POST http://localhost:3000/songs/store
 Content-Type: application/json
 
 {
-    "title": "fuck3412u1",
+    "title": "bar music",
     "audio_url":"/mypc",
     "image_url":"/mypc",
     "uploader":{
-        "uid":"123",
-        "name":"testname"
+        "uid":"61a6f6ffcffbd20da84dcf1f",
+        "name":"Lợi Cao"
     },
     "duration":300
 }
+
+###
+PUT http://localhost:3000/songs/update
+Content-Type: application/json
+
+{
+    "title": "test update",
+    "_id":"61a744a3e7dcd152b50ffb31",
+    "image_url":"mdasdasdasdasdasdadasdypc"
+}
+
+###
+PUT http://localhost:3000/users/edit
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MWE2ZjZmZmNmZmJkMjBkYTg0ZGNmMWYiLCJkaXNwbGF5X25hbWUiOiJM4bujaSBDYW8iLCJpbWdfdXJsIjoibXlwYy9pbWFnZSIsImlhdCI6MTYzODM1OTAyN30.ckQ_KY6-NhClpuUfuGPebPAeqgGwdbDu7vGepyCsB2U
+Content-Type: application/json
+
+{
+    "display_name": "test",
+    "image_url":"mdasdasdasdasdasdadasdypc"
+}
+
+###
+Delete http://localhost:3000/songs/delete
+
+
+###
+get http://localhost:3000/songs/user-song?uid=61a6f6ffcffbd20da84dcf1f&page=1
+
 
 ###
 POST http://localhost:3000/users/login
@@ -37,10 +65,10 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/users
+GET http://localhost:3000/songs/getPage?page=1
 
 ###
-GET http://localhost:3000/courses/lap-trinh-mobile-voi-redux
+GET http://localhost:3000/users/show
 
 ###
 

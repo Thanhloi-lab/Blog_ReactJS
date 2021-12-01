@@ -1,15 +1,10 @@
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 
-module.exports = (credentials = [])=>{
+module.exports = ()=>{
     return (req, res, next)=>{
         console.log("authorizing");
-        //allow for string or array
-        if(typeof credentials === 'string'){
-            credentials = [credentials];
-        }
-
         //find jwt in headers
-        const token = req.headers['Authorization'];
+        const token = req.headers['authorization'];
         if(!token){
             return res.status(401).json({error:'Bạn không có quyền truy cập thông tin này.'});
         }else{
@@ -17,23 +12,12 @@ module.exports = (credentials = [])=>{
             //bearer
             const tokenBody = token.split(' ')[1];
 
-            jwt.verify(tokenBody, process.env.JWT_SECRET, (err, decoded)=>{
+            jwt.verify(tokenBody, process.env.JWT_KEY, (err, decoded)=>{
                 if(err){
-                    console.log(err);
-                    return res.status(401).json({error:'Bạn không có quyền truy cập thông tin này'});
+                    return res.status(401).json({error:'Bạn không có quyền truy cập thông tin này...'});
                 }
-                //no err
-                if(credentials.length){
-                    if(
-                        decoded.scopes &&
-                        decoded.scopes.length &&
-                        credentials.some(cred=>decoded.scopes.indexOf(cred))
-                    ){
-                        next();
-                    }else{
-                        return res.status(401).json({error:'Bạn không có quyền truy cập thông tin này.'});
-                    }
-                }
+                req.payload = decoded
+                next();
             })
         }
 

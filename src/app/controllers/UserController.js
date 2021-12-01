@@ -1,18 +1,8 @@
 const User = require('../models/User');
-const {multipleMongooseToObject} = require('../../util/mongoose');
+const Song = require('../models/Song');
 
 
 class UserController{
-    //test get list song of user [get] users/show
-    show(req, res, next) {
-        User.findOne({_id:"61a5f193efb3514d2acc6fe9"}).populate("songs")
-        .then(result=> {
-            res.json(result);
-        })
-        .catch((error) => {
-            res.status(500).json({ error });
-        });
-    }
     //[post] 
     login(req, res, next){
         User.findOne({user_name: req.body.user_name})
@@ -23,9 +13,7 @@ class UserController{
                         user.generateAuthToken()
                             .then(token =>{
                                 return res.json({jwt:token});
-                            })
-
-                        
+                            })   
                     })
                 }
                 else
@@ -53,6 +41,49 @@ class UserController{
                 .catch((error) => {
                     res.status(500).json({err:'Lỗi kết nối hệ thống.' });
                 });
+    }
+    //put users/edit
+    edit(req, res, next){
+        if(req.body){
+            const oldValue = 
+            User.updateOne({_id:req.payload.uid}, req.body)
+                .then((user)=>{
+                    // User.findOne({_id:req.payload.uid}).populate('songs')
+                    //     .then((userWithSongs)=>{
+                    //         userWithSongs.songs.map(song=>song.uploader.name=userWithSongs.display_name)
+                    //     })
+                    Song.updateMany({'uploader.uid': req.payload.uid}, {'uploader.name': req.body.display_name})
+                        .then(()=>{
+                            return res.json({result:true})
+                        })
+                        .catch((err)=>{
+
+                            return res.status(400).json({result:false})
+                        })
+                })
+                .catch(()=>{
+
+                    return res.status(400).json({result:false})
+                })
+        }
+        else
+            res.status(200).json({result:true });
+
+    }
+    //put users/change-password
+    changePassword(req, res, next){
+        if(req.body.password === req.body['confirm-password']){
+            User.findOne({_id:req.payload.uid})
+                .then((user)=>{
+                    
+                    user.password = req.body.password;
+                    user.save();
+                    res.json({result:true})
+                })
+                .catch(err=>res.json({result:false}))
+
+        }else
+            res.json({result:false, message:'Nhập lại mật khẩu không đúng.'})
     }
 }
 
