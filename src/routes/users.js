@@ -4,6 +4,8 @@ var authorizeMiddleware = require('../app/middlewares/authorizeMiddleware')
 
 const userController = require('../app/controllers/UserController');
 
+router.put('/confirm-code', userController.resetPassword)
+router.post('/send-mail', userController.sendCode)
 router.put('/change-password', authorizeMiddleware(), userController.changePassword)
 router.put('/edit', authorizeMiddleware(), userController.edit)
 router.post('/sign-up', userController.store);

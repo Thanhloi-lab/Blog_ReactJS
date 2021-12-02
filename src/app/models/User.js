@@ -12,6 +12,7 @@ const UserSchema = new Schema({
     email:{type : String, maxLength:255, index: { unique: true }},
     display_name:{type : String, maxLength:255},
     songs:[{ type: Schema.Types.ObjectId, ref: 'Song' }],
+    restoreCode:{type: Object, default:{}}
 },{
     timestamps:true
 });

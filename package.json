@@ -47,6 +47,7 @@
     "mongoose-sequence": "^5.3.1",
     "morgan": "^1.10.0",
     "node-sass": "^6.0.1",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.14",
     "prettier": "^2.4.1"
   }

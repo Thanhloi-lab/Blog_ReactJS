@@ -63,9 +63,16 @@ Content-Type: application/json
 }
 
 
+###
+POST http://localhost:3000/users/send-mail
+Content-Type: application/json
+
+{
+    "email":"cthanhloi@gmail.com"
+}
 
 ###
-GET http://localhost:3000/songs/getPage?page=1
+GET http://localhost:3000/songs/get-Page?page=1
 
 ###
 GET http://localhost:3000/users/show
