@@ -47,16 +47,11 @@ class UserController{
     //put users/edit
     edit(req, res, next){
         if(req.body){
-            const oldValue = 
-            User.updateOne({_id:req.payload.uid}, req.body)
+            User.findOneAndUpdate({_id:req.payload.uid}, req.body)
                 .then((user)=>{
-                    // User.findOne({_id:req.payload.uid}).populate('songs')
-                    //     .then((userWithSongs)=>{
-                    //         userWithSongs.songs.map(song=>song.uploader.name=userWithSongs.display_name)
-                    //     })
                     Song.updateMany({'uploader.uid': req.payload.uid}, {'uploader.name': req.body.display_name})
                         .then(()=>{
-                            return res.json({result:true})
+                            return user;
                         })
                         .catch((err)=>{
 
@@ -67,6 +62,19 @@ class UserController{
 
                     return res.status(400).json({result:false})
                 })
+                .finally(() => {
+                    User.findOne({_id: req.payload.uid})
+                        .then(user=>{
+                            user.generateAuthToken()
+                                .then(token =>{
+                                    return res.json({result:true, jwt:token});
+                                }) 
+                                .catch((err)=>res.status(400).json({result:true, jwt:'cannot generare jwt'}))
+                        })
+                        .catch((err)=>res.status(400).json({result:true, jwt:'cannot generare jwt'}))
+                });
+
+            
         }
         else
             res.status(200).json({result:true });
