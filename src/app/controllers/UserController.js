@@ -11,11 +11,15 @@ class UserController{
             .then(user=>{
                 if(user){
                     user.comparePassword(req.body.password, (err, isMatch)=>{
-                        if(err) return res.status(401).json({err: 'Tài khoản hoặc mật khẩu không đúng.'});
-                        user.generateAuthToken()
-                            .then(token =>{
-                                return res.json({jwt:token});
-                            })   
+                        if(err) return res.status(401).json({err: 'Lỗi không xác minh được tài khoản.'});
+                        if(isMatch)
+                            user.generateAuthToken()
+                                .then(token =>{
+                                    return res.json({jwt:token});
+                                })   
+                        else{
+                            return res.status(401).json({err: 'Tài khoản hoặc mật khẩu không đúng.'});
+                        }
                     })
                 }
                 else
@@ -115,7 +119,7 @@ class UserController{
                         const code = sysEmail.getCode();
                         var mailOptions = {
                             from: '"Nodemailer Contact" <mypersonalaccount@gmail.com>',
-                            to: 'cthanhloi2705@gmail.com',
+                            to: req.body.email,
                             subject: 'Restore code',
                             text: 'Mã khôi phục của bạn là: ' + code
                         };
@@ -152,6 +156,9 @@ class UserController{
             User.findOne({email:req.body.email})
                 .then((user)=>{
                     if(user){
+                        
+
+
                         let now = new Date();
                         if(!user.restoreCode.code || !user.restoreCode.timeExpired)
                         {
@@ -162,6 +169,12 @@ class UserController{
                             return res.status(410).json({result:false, message:'Mã xác thực không tồn tại.'})
                         }
                         else{
+                            user.comparePassword(req.body.old_password, (err, isMatch)=>{
+                                if(err) return res.status(401).json({err: 'Lỗi không xác minh được tài khoản.'});
+                                if(!isMatch)
+                                    return res.status(401).json({result:false, message:'Mật khẩu hiện tại không chính xác'});
+                            })
+
                             user.password = req.body.password
                             user.restoreCode = {};
                             user.save()
