@@ -156,9 +156,6 @@ class UserController{
             User.findOne({email:req.body.email})
                 .then((user)=>{
                     if(user){
-                        
-
-
                         let now = new Date();
                         if(!user.restoreCode.code || !user.restoreCode.timeExpired)
                         {

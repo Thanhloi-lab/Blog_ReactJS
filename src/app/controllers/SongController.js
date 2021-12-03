@@ -46,8 +46,11 @@ class SongController {
     getPage(req, res, next){
         if(req.query.page)
         {
-            Song.find({}).sort('createdAt').skip(req.query.page-1).limit(10)
-                .then(result=>{res.json(result)})
+            Song.find({}).sort('createdAt').skip((req.query.page-1) * 10).limit(10)
+                .then(result=>{
+                    console.log(result.length);
+                    res.json(result)
+                })
                 .catch(()=>res.status(500).json({err:"Có lỗi trong quá trình thực hiện"}))
         }
         else
@@ -59,7 +62,7 @@ class SongController {
         if(req.query.page && req.query.query){
             const songs = Song.find({'title': new RegExp(req.query.query, "i")})
                 .sort('createdAt')
-                .skip(req.query.page-1).limit(10)
+                .skip((req.query.page-1) * 10).limit(10)
                 .then(result=>{
                     res.json(result);
                 })

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 async function connect(){
     try{
-        await mongoose.connect('mongodb+srv://Nigga:6nigga@cluster0.moas0.mongodb.net/Song?retryWrites=true&w=majority',{
+        await mongoose.connect('mongodb://127.0.0.1:27017/Musik_App',{
             useNewUrlParser:true,
             useUnifiedTopology:true,
         });
