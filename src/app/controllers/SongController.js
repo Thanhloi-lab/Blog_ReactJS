@@ -6,7 +6,7 @@ class SongController {
     //post songs/store
     store(req, res, next) {
 
-        User.findOne({$and:[{ _id: req.body.uploader.uid}, {display_name: req.body.uploader.name}]}, (err, user)=>{
+        User.findOne({$and:[{ _id: req.body.uploader.uid}]}, (err, user)=>{
             if(user){
                 const song = new Song(req.body);
                 song.save()

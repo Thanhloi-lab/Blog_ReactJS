@@ -1,6 +1,8 @@
 const PlayList = require('../models/Playlist');
 const Song = require('../models/Song');
 const User = require('../models/User');
+const SongInPlayList = require('../models/SongInPlayList');
+const { Promise } = require('mongoose');
 
 class PlayListController
 {
@@ -53,6 +55,49 @@ class PlayListController
         PlayList.find({"uploader.uid" : req.body.uid}).sort('name').limit(10)
                 .then(result=>{res.status(200).json(result)})
                 .catch(()=>res.status(500).json({err:"Có lỗi trong quá trình thực hiện"}))
+    }
+    checkSongInPlayList(req, res, next)
+    {
+        PlayList.updateMany(
+            { _id: req.body.playlist_id },
+            { '$pull': { 'songs': { _id: req.body.song_id } } },
+            { safe: true, multi: false }
+          ).then(()=> res.json({result:true})).catch((err)=> {res.json({result:true})});
+    }
+    addSongInPlayList(req, res, next)
+    {
+        Promise.all([PlayList.findOne({ '_id': req.body.playlist_id}).populate('songs'),Song.findOne({ '_id': req.body.song_id})])
+        .then(([playList,song]) =>
+        {
+            if(playList)
+            {
+                if(song)
+                {
+                    playList.songs.push(song);
+                    playList.save().then( ()=> {
+                        res.json({result : true})
+                    }
+                    );
+                   
+                }
+            }else
+            
+                res.json({ result: false  });
+            
+            
+        }).catch((err)=> {res.status(500).json({ error:"Lỗi kết nối về máy chủ." });});
+            
+        
+     
+    }
+    removeSongFromPlayList(req, res, next)
+    {
+        PlayList.updateMany(
+            { _id: req.body.playlist_id },
+            { '$pull': { 'songs': { _id: req.body.song_id } } },
+            { safe: true, multi: false }
+          ).then(()=> res.json({result:true})).catch((err)=> {res.status(500).json({ error:"Lỗi kết nối về máy chủ." });});
+            
     }
 }
 module.exports = new PlayListController();

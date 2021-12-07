@@ -10,9 +10,9 @@ router.put('/update',authorizeMiddleware(), playListController.update);
 router.delete('/delete', authorizeMiddleware(), playListController.delete);
 router.get('/get-playlist', playListController.getPlayList);
 router.get('/get-user-playlists', playListController.getUserPlayList);
-// router.get('/check-song-in-playlist', playListController.login);
-// router.post('/add-song-to-playlist',playListController)
-// router.delete('/remove-song-from-playlist',playListController)
+router.get('/check-song-in-playlist', playListController.checkSongInPlayList);
+router.post('/add-song-to-playlist',playListController.addSongInPlayList);
+router.delete('/remove-song-from-playlist',playListController.removeSongFromPlayList)
 
 
 module.exports = router;

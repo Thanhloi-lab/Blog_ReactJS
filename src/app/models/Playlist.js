@@ -6,7 +6,8 @@ const PlayListSchema = new Schema({
     name:{type : String, maxLength:255, required: true},
     description:{type : String, maxLength:600, required: true},
     image_url:{type : String, maxLength:600, required: true},
-    uploader:{type: Object, default:{}}
+    uploader:{type: Object, default:{}},
+    songs:[{ type: Schema.Types.ObjectId, ref: 'Song' }],
 },{
     timestamps:true
 });
