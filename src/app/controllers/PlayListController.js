@@ -58,45 +58,64 @@ class PlayListController
     }
     checkSongInPlayList(req, res, next)
     {
-        PlayList.updateMany(
-            { _id: req.body.playlist_id },
-            { '$pull': { 'songs': { _id: req.body.song_id } } },
-            { safe: true, multi: false }
-          ).then(()=> res.json({result:true})).catch((err)=> {res.json({result:true})});
+        PlayList.findOne({_id : req.body.playlist_id}).then((playList)  => {
+
+            const include = playList.songs;
+            console.log(include);
+            if(include.includes(req.body.song_id))
+                return res.json({result:true});
+            else
+                return res.json({result:false});
+        }).catch((err) => res.json({result:false}))
     }
+
     addSongInPlayList(req, res, next)
     {
-        Promise.all([PlayList.findOne({ '_id': req.body.playlist_id}).populate('songs'),Song.findOne({ '_id': req.body.song_id})])
+        Promise.all([PlayList.findOne({ _id: req.body.playlist_id}),Song.findOne({ '_id': req.body.song_id})])
         .then(([playList,song]) =>
         {
             if(playList)
             {
-                if(song)
+                const include = playList.songs;
+                if(include.includes(req.body.song_id))
                 {
-                    playList.songs.push(song);
-                    playList.save().then( ()=> {
-                        res.json({result : true})
+                    return res.json({result:true});
+                }else
+                {
+                    if(song)
+                    {
+                        playList.songs.push(song);
+                        playList.save().then( ()=> {
+                        return   res.json({result : true})
+                        }
+                        );
+                       
                     }
-                    );
-                   
                 }
+
+
+               
             }else
             
-                res.json({ result: false  });
-            
-            
-        }).catch((err)=> {res.status(500).json({ error:"Lỗi kết nối về máy chủ." });});
+                res.json({ result: false  });         
+        }).catch((err)=> { res.json({ result: false  });  });
             
         
      
     }
     removeSongFromPlayList(req, res, next)
     {
-        PlayList.updateMany(
-            { _id: req.body.playlist_id },
-            { '$pull': { 'songs': { _id: req.body.song_id } } },
-            { safe: true, multi: false }
-          ).then(()=> res.json({result:true})).catch((err)=> {res.status(500).json({ error:"Lỗi kết nối về máy chủ." });});
+            PlayList.findOne({ '_id': req.body.playlist_id}).then((playList) => 
+            {
+                if(playList)
+                {
+                    playList.songs.pull(req.body.song_id);
+                    playList.save();
+                    return res.json({result :true});
+                }
+                return res.json({result:false});
+            }).catch((err) => {return res.json({result:false});});
+            
             
     }
 }
