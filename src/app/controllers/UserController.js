@@ -89,10 +89,16 @@ class UserController{
         if(req.body.password === req.body['confirm-password']){
             User.findOne({_id:req.payload.uid})
                 .then((user)=>{
+                    user.comparePassword(req.body.old_password, (err, isMatch)=>{
+                        if(isMatch){
+                            user.password = req.body.password;
+                            user.save();
+                            return res.json({result:true})
+                        }
+                        else
+                            return res.json({result:false, message:"Mật khẩu hiện tại không chính xác."})
+                    })
                     
-                    user.password = req.body.password;
-                    user.save();
-                    res.json({result:true})
                 })
                 .catch(err=>res.json({result:false}))
 
