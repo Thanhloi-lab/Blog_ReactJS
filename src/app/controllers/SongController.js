@@ -1,6 +1,6 @@
 const Song = require('../models/Song');
 const User = require('../models/User');
-
+const PlayList = require('../models/Playlist');
 
 class SongController {
     //post songs/store
@@ -88,6 +88,24 @@ class SongController {
             .catch((error) => {
                 res.status(500).json({ error:"Lối kết nối máy chủ." });
             });
+    }
+
+    //get get-songs-of-playlist 
+    getInPlaylist(req, res, next){
+        if(!req.param.playlist_id){
+            return res.status(401).json({result:false, message:"Khong tìm thấy playlist"})
+        }
+        else{
+            PlayList.find({_id:req.param.playlist_id}).populate("songs")
+                .then(result=>{
+                    if(result)
+                        return res.json(result.songs);
+                    else
+                        return res.status(401).json({result:false, message:"Khong tìm thấy playlist"})
+                })
+                .catch(err=>res.status(401).json({result:false, message:"Khong tìm thấy playlist"}))
+                
+        }
     }
 }
 
