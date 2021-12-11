@@ -45,24 +45,24 @@ class PlayListController
     }
     getPlayList(req, res, next)
     {
-        PlayList.findOne({_id: req.body.playlist_id}).then(
+        PlayList.findOne({_id: req.query.playlist_id}).then(
                 result => {
                 const playList = new PlayList (result);
                 res.status(200).json(  playList);})
         .catch((err) => {console.log(err); res.status(404).json(null)})
     }
     getUserPlayList(req, res, next){
-        PlayList.find({"uploader.uid" : req.body.uid}).sort('name').limit(10)
+        PlayList.find({"uploader.uid" : req.query.uid}).sort('name')
                 .then(result=>{res.status(200).json(result)})
                 .catch(()=>res.status(500).json({err:"Có lỗi trong quá trình thực hiện"}))
     }
     checkSongInPlayList(req, res, next)
     {
-        PlayList.findOne({_id : req.body.playlist_id}).then((playList)  => {
+        PlayList.findOne({_id : req.query.playlist_id}).then((playList)  => {
 
             const include = playList.songs;
             console.log(include);
-            if(include.includes(req.body.song_id))
+            if(include.includes(req.query.song_id))
                 return res.json({result:true});
             else
                 return res.json({result:false});
@@ -71,9 +71,12 @@ class PlayListController
 
     addSongInPlayList(req, res, next)
     {
+    	console.log(req.query.playlist_id)
+    	console.log(req.query.song_id)
         Promise.all([PlayList.findOne({ _id: req.body.playlist_id}),Song.findOne({ '_id': req.body.song_id})])
         .then(([playList,song]) =>
         {
+        	
             if(playList)
             {
                 const include = playList.songs;

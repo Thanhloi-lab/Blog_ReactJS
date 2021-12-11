@@ -79,7 +79,7 @@ class SongController {
                 options:{
                     limit: 10,
                     sort:{createdAt:1},
-                    skip: req.query.page
+                    skip: req.query.page*10
                 }
             })
             .then(result=> {
@@ -92,12 +92,14 @@ class SongController {
 
     //get get-songs-of-playlist 
     getInPlaylist(req, res, next){
-        if(!req.param.playlist_id){
+        if(!req.query.playlist_id){
             return res.status(401).json({result:false, message:"Khong tìm thấy playlist"})
         }
         else{
-            PlayList.find({_id:req.param.playlist_id}).populate("songs")
+        	
+            PlayList.findOne({_id:req.query.playlist_id}).populate("songs")
                 .then(result=>{
+                
                     if(result)
                         return res.json(result.songs);
                     else

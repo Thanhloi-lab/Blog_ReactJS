@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const Song = require('../models/Song');
-const nodeMailer = require('nodeMailer');
+const nodeMailer = require('nodemailer');
 const sysEmail = require('../../sys_email');
 
 
@@ -172,12 +172,6 @@ class UserController{
                             return res.status(410).json({result:false, message:'Mã xác thực không tồn tại.'})
                         }
                         else{
-                            user.comparePassword(req.body.old_password, (err, isMatch)=>{
-                                if(err) return res.status(401).json({err: 'Lỗi không xác minh được tài khoản.'});
-                                if(!isMatch)
-                                    return res.status(401).json({result:false, message:'Mật khẩu hiện tại không chính xác'});
-                            })
-
                             user.password = req.body.password
                             user.restoreCode = {};
                             user.save()
