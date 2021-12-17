@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const mongooseDelete = require('mongoose-delete');
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
 const jwt = require('jsonwebtoken');
@@ -13,15 +12,8 @@ const UserSchema = new Schema({
     display_name:{type : String, maxLength:255},
     songs:[{ type: Schema.Types.ObjectId, ref: 'Song' }],
     restoreCode:{type: Object, default:{}}
-},{
-    timestamps:true
 });
 
-
-UserSchema.plugin(mongooseDelete, {
-    overrideMethods: true,
-    deletedAt:true,
-});
 
 UserSchema.pre('save', function(next) {
     var user = this;
