@@ -4,8 +4,9 @@ var authorizeMiddleware = require('../app/middlewares/authorizeMiddleware')
 
 const songController = require('../app/controllers/SongController')
 
-
-router.get('/songs-in-playlist', authorizeMiddleware(), songController.getInPlaylist)
+router.get('/top-listen-count', songController.getTopListen);
+router.put('/increase-listen-count', songController.increaseListenCount);
+router.get('/songs-in-playlist', authorizeMiddleware(), songController.getInPlaylist);
 router.get('/user-song', authorizeMiddleware(), songController.userSong)
 router.delete('/delete', authorizeMiddleware(), songController.delete)
 router.put('/update', authorizeMiddleware(), songController.update);

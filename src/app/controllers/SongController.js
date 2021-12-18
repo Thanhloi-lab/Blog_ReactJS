@@ -1,6 +1,8 @@
 const Song = require("../models/Song");
 const User = require("../models/User");
 const PlayList = require("../models/Playlist");
+const dateFunc = require('../../dateFunc');
+const {multipleMongooseToObject} = require('../../util/mongoose');
 
 class SongController {
   //post songs/store
@@ -29,14 +31,19 @@ class SongController {
 
   //put songs/update-song
   update(req, res, next) {
-    Song.updateOne({ _id: req.body._id }, req.body)
-      .then(() => res.json({ result: true }))
+    Song.updateOne( {$and:[{ _id: req.body._id, "uploader.uid": req.payload.uid }]}, req.body)
+      .then((result) => {
+        if(result.modifiedCount>0)
+          return res.json({ result: true })
+        else
+          return res.json({ result: false, message: "Không thể sửa bài hát của người khác"})
+      })
       .catch(() => res.status(400).json({ result: false }));
   }
 
   //Delete songs/delete
   delete(req, res, next) {
-    Song.delete({ _id: req.body.song_id })
+    Song.delete({$and:[{ _id: req.body._id, "uploader.uid": req.payload.uid }]})
       .then(() => res.json({ result: true }))
       .catch(() => res.status(400).json({ result: false }));
   }
@@ -116,6 +123,57 @@ class SongController {
         );
     }
   }
+
+  //put increase-listen-count
+  increaseListenCount(req, res, next){
+    Song.findById(req.body.song_id, (err, song) => {
+      if(err){
+        return res.status(500).json({result:false, message:'Lỗi kết nối cơ sở dữ liệu.'})
+      }
+      if(song){
+
+        song.listenCount.push(new Date());
+        song.save();
+        return res.json({result :true})
+      }
+      else{
+        return res.json({result :false, message :"Bài hát không tồn tại."})
+      }
+    })
+  }
+
+  //get top-listen
+  getTopListen(req, res, next){
+    const date = new Date();
+    var startDate;
+    var stopDate;
+
+    if(req.query.thang==='1'){
+      startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      stopDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+
+    if(req.query.nam==='1'){
+      startDate = new Date(new Date().getFullYear(), 0, 1);
+      stopDate = new Date(new Date().getFullYear(), 11, 31);
+    }
+
+    Song.find({ listenCount : { $elemMatch: { $gte: startDate,  $lt: stopDate} } })
+      .then(result=>{
+        var songs = result.map(song=>song.toObject());
+        songs.forEach(song=>{ 
+          song.listenCount = dateFunc.getDates(startDate, stopDate, song.listenCount).length
+          return song;
+        })
+        songs.sort((a, b) => b.listenCount - a.listenCount)
+
+        return res.json(songs.slice(0, 50))
+      })
+      .catch((err)=>res.json({result:false, message:"Lỗi kết nối cơ sở dữ liêu."}))
+    
+
+  }
+  
 }
 
 module.exports = new SongController();

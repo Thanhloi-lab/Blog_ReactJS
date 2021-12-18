@@ -15,11 +15,12 @@ Content-Type: application/json
 ###
 PUT http://localhost:3000/songs/update
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MWJkNmY1ZjhkOTMxYjNjNTEyZWNkNTkiLCJkaXNwbGF5X25hbWUiOiJM4bujaSBDYW8iLCJpbWdfdXJsIjoibXlwYy9pbWFnZSIsImlhdCI6MTYzOTgwNDc4MH0.Whjo1LJnpV7TQ5B4Ihi-50RNT_Y_OZzj38aW0RyE2kM
 
 {
-    "title": "test update",
+    "title": "test",
     "_id":"61a744a3e7dcd152b50ffb31",
-    "image_url":"mdasdasdasdasdasdadasdypc"
+    "image_url":"test new API"
 }
 
 ###
@@ -45,20 +46,20 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "user_name": "cthanhloi1",
+    "user_name": "cthanhloi",
     "password": "123456as"
 }
 
 ###
-POST http://localhost:3000/users/register
+POST http://localhost:3000/users/sign-up
 Content-Type: application/json
 
 {
-    "user_name": "cthanhloi1",
+    "user_name": "cthanhloi",
     "password": "123456as",
     "confirm_password": "123456as",
     "display_name":"Lợi Cao",
-    "email":"cthanhloi@gmail.com",
+    "email":"cthanhloi1@gmail.com",
     "image_url":"mypc/image"
 }
 
@@ -88,4 +89,24 @@ Content-Type: application/json
     "videoId": "bvZ1_P9eCpw",
     "level": "nhập môn",
     "image": "https://img.youtube.com/"
+}
+
+
+
+###
+get http://localhost:3000/songs/songs-in-playlist?playlist_id=61a9963874c78ffbe4491d74
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MWIzMDk3Nzg2NDcwYjM4YTRjODI1YTkiLCJkaXNwbGF5X25hbWUiOiJM4bujaSBDYW8iLCJpbWdfdXJsIjoibXlwYy9pbWFnZSIsImlhdCI6MTYzOTEyMzMyOX0.CThZYhcLT5woBu1H3ZQFoRKv1VuCCLBcdzVnVPGwm5A
+Content-Type: application/json
+
+{
+    "display_name": "test",
+    "image_url":"mdasdasdasdasdasdadasdypc"
+}
+
+###
+put http://localhost:3000/songs/increase-listen-count
+Content-Type: application/json
+
+{
+    "song_id":"61a74a5777071770eeb085df"
 }

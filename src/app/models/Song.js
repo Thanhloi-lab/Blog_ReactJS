@@ -7,11 +7,11 @@ const SongSchema = new Schema({
     audio_url:{type : String, maxLength:600, required: true},
     image_url:{type : String, maxLength:600, required: true},
     duration:{type : Number, default:0},
-    uploader:{type: Object, default:{}}
+    uploader:{type: Object, default:{}},
+    listenCount:{type : Array, default:[]}
 },{
     timestamps:true
 });
-
 
 SongSchema.plugin(mongooseDelete, {
     overrideMethods: true,

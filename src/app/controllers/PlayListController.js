@@ -1,7 +1,6 @@
 const PlayList = require('../models/Playlist');
 const Song = require('../models/Song');
 const User = require('../models/User');
-const SongInPlayList = require('../models/SongInPlayList');
 const { Promise } = require('mongoose');
 
 class PlayListController
