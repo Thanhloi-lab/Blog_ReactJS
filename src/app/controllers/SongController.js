@@ -152,11 +152,16 @@ class SongController {
       startDate = new Date(date.getFullYear(), date.getMonth(), 1);
       stopDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     }
-
-    if(req.query.nam==='1'){
+    else if(req.query.nam==='1'){
       startDate = new Date(new Date().getFullYear(), 0, 1);
       stopDate = new Date(new Date().getFullYear(), 11, 31);
     }
+    else{
+      startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 1);
+      stopDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59);
+    }
+    
+  
 
     Song.find({ listenCount : { $elemMatch: { $gte: startDate,  $lt: stopDate} } })
       .then(result=>{
