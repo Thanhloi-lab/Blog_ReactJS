@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 async function connect(){
     try{
-        await mongoose.connect('mongodb://localhost:27017/Musik_App',{
+        await mongoose.connect('mongodb+srv://khang:bao123456@cluster0.sd6xi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
+
             useNewUrlParser:true,
             useUnifiedTopology:true,
         });

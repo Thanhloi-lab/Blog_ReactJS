@@ -29,7 +29,7 @@ class PlayListController
     }
     update(req, res, next) {
 
-        PlayList.updateOne({_id: req.body.playlist_id}, req.body)
+        PlayList.updateOne({_id: req.body.playlist_id,"uploader.uid": req.payload.uid }, req.body)
         .then(()=>res.json({result: true}))
         .catch(()=>res.status(400).json({result: false}))
         
@@ -37,7 +37,7 @@ class PlayListController
 
     delete(req, res, next) {
 
-        PlayList.deleteOne({_id: req.body.playlist_id})
+        PlayList.deleteOne({_id: req.body.playlist_id,"uploader.uid": req.payload.uid })
         .then(()=>res.json({result: true}))
         .catch(()=>res.status(400).json({result: false}))
         

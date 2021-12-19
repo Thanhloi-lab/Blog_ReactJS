@@ -8,7 +8,7 @@ const { env } = require('process');
 env.JWT_KEY = 'musik'
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 const route = require('./routes');
 const db = require('./config/db');
